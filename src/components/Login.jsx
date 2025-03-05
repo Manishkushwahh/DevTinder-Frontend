@@ -9,6 +9,7 @@ const Login = () => {
     
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -23,10 +24,11 @@ const Login = () => {
             {withCredentials: true},
         );
             dispatch(addUser(res.data));
+            navigate("/");
        } catch (err) {
+            setError(err?.response?.data);
             console.log(err);
        }
-       return navigate("/");
     };
 
     return(
@@ -55,6 +57,7 @@ const Login = () => {
                 placeholder="" />
                 </fieldset>
             </div>
+            <p className="text-red-500">{error}</p>
             <div className="card-actions justify-center my-4">
             <button className="btn btn-primary" onClick={handleLogin}>Login</button>
             </div>
