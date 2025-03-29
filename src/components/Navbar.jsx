@@ -33,7 +33,7 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
           {"Wellcome, " + user.firstName}
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar mx-5">
-          <div className="w-10 rounded-full">
+          <div className="w-9 rounded-full bg-white">
           <img
             alt="user image"
             src={user.photoUrl} />
@@ -48,7 +48,21 @@ const Navbar = () => {
             <span className="badge">New</span>
           </Link>
           </li>
-          <li><a>Settings</a></li>
+          <li>
+          <Link to="/connections" className="justify-between">
+            Friends
+          </Link>
+          </li>
+          <li>
+          <Link to="/requests" className="justify-between">
+            Requests
+          </Link>
+          </li>
+          <li>
+          <Link to="/" className="justify-between">
+            Feed
+          </Link>
+          </li>
           <li><a onClick={handleLogout}>Logout</a></li>
           </ul>
           </div>

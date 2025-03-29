@@ -28,9 +28,13 @@ const Feed = () => {
         getFeed();
     }, []);
 
+    if(!feed) return;
+    
+    if(feed.length <= 0) return <h1 className="font-bold text-2xl text-center mt-10">No Suggested User Found</h1>
+
     return feed && (
         <div className="flex justify-center my-5 ">
-            <UserCard user={feed[2]} />
+            <UserCard user={feed[0]} />
         </div>
     );
 };

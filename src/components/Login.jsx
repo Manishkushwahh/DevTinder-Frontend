@@ -9,7 +9,10 @@ const Login = () => {
     
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [firstName, setFisrtName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [error, setError] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -31,12 +34,55 @@ const Login = () => {
        }
     };
 
+    const handleSignUp = async () => {
+        try {
+            const res = await axios.post(
+                BASE_URL + "/signup",
+                {
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                },
+                {withCredentials: true},
+            );
+            dispatch(addUser(res.data));
+            navigate("/profile");
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return(
-        <>
-        <div className="card card-border bg-base-300 w-96 my-5 flex justify-center">
+        <div className="flex justify-center">
+        <div className="card card-border bg-base-300 w-96 my-5">
         <div className="card-body">
-            <h2 className="card-title justify-center">Login</h2>
+            <h2 className="card-title justify-center">{isLoggedIn ? "Login" : "Sign Up"}</h2>
             <div>
+            {!isLoggedIn && (
+                <>
+                <fieldset className="fieldset">
+                <legend className="fieldset-legend">First Name</legend>
+                <input 
+                type="text" 
+                className="input" 
+                value={firstName}
+                onChange={(e) => setFisrtName(e.target.value)}
+                placeholder="" />
+                </fieldset>
+
+                <fieldset className="fieldset">
+                <legend className="fieldset-legend">Last Name</legend>
+                <input 
+                type="text" 
+                className="input" 
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="" />
+                </fieldset>
+                </>
+            )}
+
                 <fieldset className="fieldset">
                 <legend className="fieldset-legend">Email Id</legend>
                 <input 
@@ -59,11 +105,16 @@ const Login = () => {
             </div>
             <p className="text-red-500">{error}</p>
             <div className="card-actions justify-center my-4">
-            <button className="btn btn-primary" onClick={handleLogin}>Login</button>
+            <button className="btn btn-primary" onClick={isLoggedIn ? handleLogin : handleSignUp}>{isLoggedIn ? "Login" : "Sign Up"}</button>
             </div>
+
+            <p className="text-center cursor-pointer" 
+            onClick={() => setIsLoggedIn((value) => !value)}>
+                {isLoggedIn ? "New User !! Sign-Up Here" : "Existing User ? Login Here"}
+            </p>
         </div>
         </div>
-        </>
+        </div>
     );
 };
 
