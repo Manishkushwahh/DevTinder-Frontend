@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ const Chat = () => {
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
+    const [targetUser, setTargetUser] = useState();
     const {targetUserId} = useParams();
     // console.log(targetUserId);
 
@@ -23,6 +24,8 @@ const Chat = () => {
                 {withCredentials: true}
             );
             console.log(chat.data.messages);
+            // console.log(chat.data.participants);
+
 
             const chatMessage = chat?.data?.messages.map((msg) => {
                 const {senderId, text} = msg;
@@ -32,6 +35,12 @@ const Chat = () => {
                     text
                 };
             });
+
+            const receiver = chat?.data?.participants.filter((res)=> {
+                return res._id === targetUserId
+            });
+            setTargetUser(receiver[0]);
+            // console.log(targetUser?.firstName);
             setMessages(chatMessage);
         } catch (error) {
             console.log(error);
@@ -77,7 +86,14 @@ const Chat = () => {
     return (
         <div className="flex justify-center items-center">
         <div className="flex flex-col w-3/4 h-[70vh] border border-gray-100 m-5">
-            <div className="p-2 text-center">Chat</div>
+            <div className="flex justify-start items-center p-2 gap-2">
+                <div >
+                    <img className="w-10 rounded-full bg-white" src={targetUser?.photoUrl} alt="image" />
+                </div>
+                <div>
+                    <h1>{targetUser?.firstName + " " + targetUser?.lastName}</h1>
+                </div>
+            </div>
             <hr></hr>
             <div className="flex-1 overflow-scroll p-5">
                 {messages.map((msg, index)=> {
